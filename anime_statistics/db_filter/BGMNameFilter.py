@@ -30,10 +30,10 @@ def regsp(istr, repl):
 
 
 # 输出提醒有多个匹配值，需要手工确认
-def print_check(origin, results, tag):
-    text = 'tag[' + tag + '], id[' + str(origin[0]) + '], name[' + origin[1].encode("GBK",
+def print_check(o, r, tag):
+    text = 'tag[' + tag + '], id[' + str(o[0]) + '], name[' + o[1].encode("GBK",
                                                                                     'ignore') + '] have multiple matching results: \n'
-    for result in results:
+    for result in r:
         text += 'bgm name[' + result[1].encode("GBK", 'ignore') + '], url[' + result[4].encode("GBK", 'ignore') + '] \n'
     print text
 
@@ -47,10 +47,13 @@ for origin in origins:
 
     aid = origin[0]
     name = origin[1]
+
+    name = name.replace(u'劇場版', '').strip()
+
     # 精确查找
     results = fetch(name)
     if len(results) > 0:
-        update(results[0][2], results[0][3], aid)
+        update(results[0][3], results[0][4], aid)
         continue
 
     # 去除括号内容后精确查找
@@ -59,7 +62,7 @@ for origin in origins:
     noBracket = noBracket.strip()
     results = fetch(noBracket)
     if len(results) > 0:
-        update(results[0][2], results[0][3], aid)
+        update(results[0][3], results[0][4], aid)
         continue
 
     # 使用括号内容精确查找
@@ -70,26 +73,26 @@ for origin in origins:
         bracketCont = bracketCont.strip()
         results = fetch(bracketCont)
         if len(results) > 0:
-            update(results[0][2], results[0][3], aid)
+            update(results[0][3], results[0][4], aid)
             continue
 
     # 使用单个字符的通配符取代特殊字符伪精确查找
     newReg = regsp(name, '_')
     results = fetch(newReg)
     if len(results) > 0:
-        update(results[0][2], results[0][3], aid)
+        update(results[0][3], results[0][4], aid)
         continue
 
     newReg = regsp(noBracket, '_')
     results = fetch(newReg)
     if len(results) > 0:
-        update(results[0][2], results[0][3], aid)
+        update(results[0][3], results[0][4], aid)
         continue
 
     newReg = regsp(bracketCont, '_')
     results = fetch(newReg)
     if len(results) > 0:
-        update(results[0][2], results[0][3], aid)
+        update(results[0][3], results[0][4], aid)
         continue
 
     # 使用通配符取代空格的模糊查找
@@ -98,7 +101,7 @@ for origin in origins:
     results = fetch(regSpace)
     if len(results) > 0:
         if len(results) == 1:
-            update(results[0][2], results[0][3], aid)
+            update(results[0][3], results[0][4], aid)
         else:
             print_check(origin, results, 'replace space')
         continue
@@ -108,7 +111,7 @@ for origin in origins:
     results = fetch(noBracketReg)
     if len(results) > 0:
         if len(results) == 1:
-            update(results[0][2], results[0][3], aid)
+            update(results[0][3], results[0][4], aid)
         else:
             print_check(origin, results, 'replace brackets')
         continue
@@ -119,7 +122,7 @@ for origin in origins:
     results = fetch(reglr)
     if len(results) > 0:
         if len(results) == 1:
-            update(results[0][2], results[0][3], aid)
+            update(results[0][3], results[0][4], aid)
         else:
             print_check(origin, results, 'replace head tail')
         continue
@@ -130,7 +133,7 @@ for origin in origins:
     results = fetch(fuzzyReg)
     if len(results) > 0:
         if len(results) == 1:
-            update(results[0][2], results[0][3], aid)
+            update(results[0][3], results[0][4], aid)
         else:
             print_check(origin, results, 'replace all sp')
 
