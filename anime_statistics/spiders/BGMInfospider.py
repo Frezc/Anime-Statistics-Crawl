@@ -18,8 +18,8 @@ class BgmInfospiderSpider(scrapy.Spider):
         super(BgmInfospiderSpider, self).__init__(*args, **kwargs)
         self.start_urls = []
         i = 1
-        while i <= 134:
-            self.start_urls.append('http://bangumi.tv/anime/browser?sort=rank&page=' + str(i))
+        while i <= 404:
+            self.start_urls.append('http://bangumi.tv/anime/browser?page=' + str(i))
             i += 1
 
     def parse(self, response):
