@@ -1,18 +1,13 @@
 # -*- coding: utf-8 -*-
-import MySQLdb
+from MySqlConn import MysqlConn
 import scrapy
 
 
 class BgmInfospiderSpider(scrapy.Spider):
     name = "BGMInfo"
     allowed_domains = ["bangumi.tv"]
-    conn = MySQLdb.connect(host='localhost',
-                           user='root',
-                           passwd='123456',
-                           db='anime_statistics',
-                           charset="utf8",
-                           port=3306)
-    cur = conn.cursor()
+    conn = MysqlConn()
+    cur = conn.start_conn()
 
     def __init__(self, *args, **kwargs):
         super(BgmInfospiderSpider, self).__init__(*args, **kwargs)
@@ -53,6 +48,4 @@ class BgmInfospiderSpider(scrapy.Spider):
                 values)
 
     def closed(self, reason):
-        self.conn.commit()
-        self.cur.close()
         self.conn.close()

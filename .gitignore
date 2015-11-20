@@ -1,3 +1,5 @@
 .idea
 anime_statistics/*.pyc
 anime_statistics/spiders/*.pyc
+anime_statistics/db_filter/*.pyc
+anime_statistics/db_filter/MySqlConn.py

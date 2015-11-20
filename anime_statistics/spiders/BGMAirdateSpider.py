@@ -1,20 +1,15 @@
 # -*- coding: utf-8 -*-
 import json
 
-import MySQLdb
+from MySqlConn import MysqlConn
 import scrapy
 
 
 class BGMAirdateSpider(scrapy.Spider):
     name = "BGMAirdate"
     allowed_domains = ["api.bgm.tv"]
-    conn = MySQLdb.connect(host='localhost',
-                           user='root',
-                           passwd='123456',
-                           db='anime_statistics',
-                           charset="utf8",
-                           port=3306)
-    cur = conn.cursor()
+    conn = MysqlConn()
+    cur = conn.start_conn()
 
     def __init__(self, *args, **kwargs):
         super(BGMAirdateSpider, self).__init__(**kwargs)
@@ -30,6 +25,4 @@ class BGMAirdateSpider(scrapy.Spider):
         self.cur.execute('update bgm_anime_info SET air_date = %s where id = %s', value)
 
     def closed(self, reason):
-        self.conn.commit()
-        self.cur.close()
         self.conn.close()

@@ -1,18 +1,13 @@
 # -*- coding: utf-8 -*-
-import MySQLdb
+from MySqlConn import MysqlConn
 import scrapy
 
 
 class SatiRmUselessSpider(scrapy.Spider):
     name = "SATIRmUseless"
     allowed_domains = ["animesachi.com"]
-    conn = MySQLdb.connect(host='localhost',
-                           user='root',
-                           passwd='123456',
-                           db='anime_statistics',
-                           charset="utf8",
-                           port=3306)
-    cur = conn.cursor()
+    conn = MysqlConn
+    cur = conn.start_conn()
 
     def __init__(self, *args, **kwargs):
         super(SatiRmUselessSpider, self).__init__(*args, **kwargs)
@@ -29,6 +24,4 @@ class SatiRmUselessSpider(scrapy.Spider):
             self.cur.execute('delete from anime_relate_info WHERE sati_url = %s', response.url)
 
     def closed(self, reason):
-        self.conn.commit()
-        self.cur.close()
         self.conn.close()

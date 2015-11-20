@@ -1,19 +1,14 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import json
-import MySQLdb
+from MySqlConn import MysqlConn
 
 
 class AnninfospiderSpider(scrapy.Spider):
     name = "AnnInfo"
     allowed_domains = ["animenewsnetwork.com"]
-    conn = MySQLdb.connect(host='localhost',
-                           user='root',
-                           passwd='123456',
-                           db='anime_statistics',
-                           charset="utf8",
-                           port=3306)
-    cur = conn.cursor()
+    conn = MysqlConn()
+    cur = conn.start_conn()
 
     def __init__(self, *args, **kwargs):
         super(AnninfospiderSpider, self).__init__(*args, **kwargs)
@@ -95,6 +90,4 @@ class AnninfospiderSpider(scrapy.Spider):
             values)
 
     def closed(self, reason):
-        self.conn.commit()
-        self.cur.close()
         self.conn.close()

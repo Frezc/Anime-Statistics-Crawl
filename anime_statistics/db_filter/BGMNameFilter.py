@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
-import MySQLdb
+from MySqlConn import MysqlConn
 import re
 
-conn = MySQLdb.connect(host='localhost',
-                       user='root',
-                       passwd='123456',
-                       db='anime_statistics',
-                       charset="utf8",
-                       port=3306)
-cur = conn.cursor()
+conn = MysqlConn()
+cur = conn.start_conn()
 
 
 def fetch(name):
@@ -137,6 +132,4 @@ for origin in origins:
         else:
             print_check(origin, results, 'replace all sp')
 
-conn.commit()
-cur.close()
 conn.close()

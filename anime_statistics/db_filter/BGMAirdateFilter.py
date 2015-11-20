@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-import MySQLdb
-import re
+from MySqlConn import MysqlConn
 
-conn = MySQLdb.connect(host='localhost',
-                       user='root',
-                       passwd='123456',
-                       db='anime_statistics',
-                       charset="utf8",
-                       port=3306)
-cur = conn.cursor()
+conn = MysqlConn()
+cur = conn.start_conn()
 
 
 def fetch(date):
@@ -42,6 +36,4 @@ for origin in origins:
     elif len(results) == 1:
         update(results[0][3], results[0][4], aid)
 
-conn.commit()
-cur.close()
 conn.close()

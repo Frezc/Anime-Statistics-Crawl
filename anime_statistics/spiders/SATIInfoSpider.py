@@ -1,19 +1,13 @@
 # -*- coding: utf-8 -*-
 import scrapy
-import MySQLdb
-import re
+from MySqlConn import MysqlConn
 
 
 class SatiInfospiderSpider(scrapy.Spider):
     name = "SATIInfo"
     allowed_domains = ["animesachi.com"]
-    conn = MySQLdb.connect(host='localhost',
-                           user='root',
-                           passwd='123456',
-                           db='anime_statistics',
-                           charset="utf8",
-                           port=3306)
-    cur = conn.cursor()
+    conn = MysqlConn()
+    cur = conn.start_conn()
 
     def __init__(self, *args, **kwargs):
         super(SatiInfospiderSpider, self).__init__(*args, **kwargs)
@@ -56,6 +50,4 @@ class SatiInfospiderSpider(scrapy.Spider):
                 values)
 
     def closed(self, reason):
-        self.conn.commit()
-        self.cur.close()
         self.conn.close()
