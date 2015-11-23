@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from MySqlConn import MysqlConn
+from anime_statistics.db_filter.MySqlConn import MysqlConn
 
 
 class SatiInfospiderSpider(scrapy.Spider):

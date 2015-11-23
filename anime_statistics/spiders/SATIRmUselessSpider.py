@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from MySqlConn import MysqlConn
+from anime_statistics.db_filter.MySqlConn import MysqlConn
 import scrapy
 
 
 class SatiRmUselessSpider(scrapy.Spider):
     name = "SATIRmUseless"
     allowed_domains = ["animesachi.com"]
-    conn = MysqlConn
+    conn = MysqlConn()
     cur = conn.start_conn()
 
     def __init__(self, *args, **kwargs):

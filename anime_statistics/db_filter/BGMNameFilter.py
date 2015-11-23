@@ -26,8 +26,7 @@ def regsp(istr, repl):
 
 # 输出提醒有多个匹配值，需要手工确认
 def print_check(o, r, tag):
-    text = 'tag[' + tag + '], id[' + str(o[0]) + '], name[' + o[1].encode("GBK",
-                                                                                    'ignore') + '] have multiple matching results: \n'
+    text = 'tag[' + tag + '], id[' + str(o[0]) + '], name[' + o[1].encode("GBK", 'ignore') + '] have multiple matching results: \n'
     for result in r:
         text += 'bgm name[' + result[1].encode("GBK", 'ignore') + '], url[' + result[4].encode("GBK", 'ignore') + '] \n'
     print text

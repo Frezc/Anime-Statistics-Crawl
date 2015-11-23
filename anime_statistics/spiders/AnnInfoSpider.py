@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import json
-from MySqlConn import MysqlConn
+from anime_statistics.db_filter.MySqlConn import MysqlConn
 
 
 class AnninfospiderSpider(scrapy.Spider):

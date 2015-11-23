@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
-from MySqlConn import MysqlConn
+from anime_statistics.db_filter.MySqlConn import MysqlConn
 import scrapy
 
 
