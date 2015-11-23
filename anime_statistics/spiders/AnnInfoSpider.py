@@ -60,7 +60,7 @@ class AnninfospiderSpider(scrapy.Spider):
             eps = eps[0]
         else:
             eps = 0
-        vintage = response.xpath('//div[@id="infotype-7"]/span/text()').extract()
+        vintage = response.xpath('//div[@id="infotype-7"]').xpath('span|div[@class="tab"][1]').xpath('text()').extract()
         if len(vintage) > 0:
             vintage = vintage[0]
         else:

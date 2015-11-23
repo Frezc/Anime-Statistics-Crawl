@@ -7,7 +7,7 @@ cur = conn.start_conn()
 
 cur.execute('SELECT id, name, sati_url, air_date FROM anime_relate_info WHERE ann_url IS NULL')
 relates = cur.fetchall()
-cur.execute('SELECT name_english, name_japanese, url, vintage FROM ann_anime_info')
+cur.execute('SELECT name_english, name_japanese, url, vintage FROM ann_anime_info WHERE consider = 1')
 ann_results = cur.fetchall()
 
 
