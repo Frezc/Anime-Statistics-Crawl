@@ -63,8 +63,12 @@ class ScoreSpider(scrapy.Spider):
                 score, votes = holder.xpath('td[@class="r"]/text()').extract()
                 score = float(score)
                 votes = int(votes)
-                ann_scores.append([score, votes, name_english, i, rid])
-                i += 1
+                if votes < 150:
+                    score = 0.0
+                    ann_scores.append([score, votes, name_english, 0, rid])
+                else:
+                    ann_scores.append([score, votes, name_english, i, rid])
+                    i += 1
         ann_scores = self.rank_by_votes(ann_scores)
 
         self.cur.executemany('update ' + self.table + ' SET ann_score = %s, ann_votes = %s, name_english = %s, ann_score_rank = %s, ann_pop_rank = %s WHERE relate_id = %s',
@@ -86,6 +90,8 @@ class ScoreSpider(scrapy.Spider):
                 else:
                     votes = 0
 
+                if votes < 200:
+                    score = 0.0
                 self.bgm_score.append([score, votes, rid])
 
     def parse_sati(self, response):
@@ -100,6 +106,8 @@ class ScoreSpider(scrapy.Spider):
                 votes = holder.xpath('td[3]/text()').extract()[0]
                 votes = int(votes)
 
+                if votes < 20:
+                    score = 0.0
                 self.sati_score.append([score, votes, rid])
 
     def fetch_id_by_url(self, url, column='bgm_url'):
@@ -122,11 +130,14 @@ class ScoreSpider(scrapy.Spider):
 
     @staticmethod
     def rank_by_score(scores, i_score=0, i_insert=-1):
-        ranked_scores = sorted(scores, key=lambda scores: scores[i_score], reverse=1)
+        ranked_scores = sorted(scores, key=lambda score: score[i_score], reverse=1)
         i = 1
         for ranked_score in ranked_scores:
-            ranked_score.insert(i_insert, i)
-            i += 1
+            if ranked_score[i_score] == 0.0:
+                ranked_score.insert(i_insert, 0)
+            else:
+                ranked_score.insert(i_insert, i)
+                i += 1
 
         return ranked_scores
 
@@ -155,4 +166,6 @@ class ScoreSpider(scrapy.Spider):
         s_s = self.rank_by_votes(s_s)
         self.cur.executemany('update ' + self.table + ' SET sati_score = %s, sati_votes = %s, sati_score_rank = %s, sati_pop_rank = %s WHERE relate_id = %s',
                              s_s)
+
+        self.cur.execute('update ' + self.table + ' set score = round((ann_score+bgm_score+sati_score)/3, 3)')
         self.conn.close()
