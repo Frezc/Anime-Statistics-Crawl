@@ -27,7 +27,7 @@ class ScoreSpider(scrapy.Spider):
 
         for info in infos:
             self.cur.execute(
-                'insert INTO ' + self.table + ' (relate_id, name, name_english, name_chinese, ann_url, bgm_url, sati_url, air_date) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)',
+                'insert INTO ' + self.table + ' (relate_id, name_jp, name_en, name_cn, ann_url, bgm_url, sati_url, air_date) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)',
                 info)
         self.conn.commit()
 
@@ -63,7 +63,7 @@ class ScoreSpider(scrapy.Spider):
                 score, votes = holder.xpath('td[@class="r"]/text()').extract()
                 score = float(score)
                 votes = int(votes)
-                if votes < 150:
+                if votes < 50:
                     score = 0.0
                     ann_scores.append([score, votes, name_english, 0, rid])
                 else:
@@ -71,7 +71,7 @@ class ScoreSpider(scrapy.Spider):
                     i += 1
         ann_scores = self.rank_by_votes(ann_scores)
 
-        self.cur.executemany('update ' + self.table + ' SET ann_score = %s, ann_votes = %s, name_english = %s, ann_score_rank = %s, ann_pop_rank = %s WHERE relate_id = %s',
+        self.cur.executemany('update ' + self.table + ' SET ann_score = %s, ann_votes = %s, name_en = %s, ann_score_rank = %s, ann_pop_rank = %s WHERE relate_id = %s',
                              ann_scores)
 
     def parse_bgm(self, response):
@@ -90,7 +90,7 @@ class ScoreSpider(scrapy.Spider):
                 else:
                     votes = 0
 
-                if votes < 200:
+                if votes < 100:
                     score = 0.0
                 self.bgm_score.append([score, votes, rid])
 
