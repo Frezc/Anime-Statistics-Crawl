@@ -21,7 +21,7 @@ class ScoreSpider(scrapy.Spider):
         super(ScoreSpider, self).__init__(**kwargs)
         self.table = "rank" + time.strftime('%Y%m')
         self.cur.execute('CREATE TABLE ' + self.table + ' LIKE score_template', )
-        self.cur.execute('SELECT * FROM relate_info')
+        self.cur.execute('SELECT id, name_jp, name_en, name_cn, ann_url, bgm_url, sati_url, air_date FROM relate_info')
         infos = self.cur.fetchall()
         # print infos
 
