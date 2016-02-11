@@ -34,7 +34,7 @@ class ScoreSpider(scrapy.Spider):
         self.start_urls = []
         self.start_urls.append(
             'http://www.animenewsnetwork.com/encyclopedia/ratings-anime.php?top50=best_bayesian&n=5000')
-        for i in range(1, 136):
+        for i in range(1, 140):
             self.start_urls.append('http://bangumi.tv/anime/browser?sort=rank&page=' + str(i))
 
         for i in range(1, 27):
