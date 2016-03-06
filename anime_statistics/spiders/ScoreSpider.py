@@ -34,7 +34,7 @@ class ScoreSpider(scrapy.Spider):
         self.start_urls = []
         self.start_urls.append(
             'http://www.animenewsnetwork.com/encyclopedia/ratings-anime.php?top50=best_bayesian&n=5000')
-        for i in range(1, 140):
+        for i in range(1, 160):
             self.start_urls.append('http://bangumi.tv/anime/browser?sort=rank&page=' + str(i))
 
         for i in range(1, 27):
@@ -129,8 +129,15 @@ class ScoreSpider(scrapy.Spider):
         return -1
 
     @staticmethod
-    def rank_by_score(scores, i_score=0, i_insert=-1):
-        ranked_scores = sorted(scores, key=lambda score: score[i_score], reverse=1)
+    def rank_by_score(scores, i_score=0, i_insert=-1, i_votes=1):
+        """
+        :param scores: 带有分数的插入结构数组
+        :param i_score: 分数索引
+        :param i_insert: 插入位置索引
+        :param i_votes: 投票人数索引
+        :return: 插入后的新列表
+        """
+        ranked_scores = sorted(scores, key=lambda score: (score[i_score], score[i_votes]), reverse=1)
         i = 1
         for ranked_score in ranked_scores:
             if ranked_score[i_score] == 0.0:
